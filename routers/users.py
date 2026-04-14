@@ -10,7 +10,22 @@ router = APIRouter(prefix="/users", tags=["Users"])
 
 @router.get("/", response_model=List[UserResponse])
 def get_users():
-    return [{"id": 1, "name": "Ali"}, {"id": 2, "name": "Sara"}]
+    return [
+        {
+            "id": 1,
+            "name": "Ali",
+            "role": "admin",
+            "hobbies": ["reading", "cricket"],
+            "address": {"city": "Karachi", "country": "Pakistan"},
+        },
+        {
+            "id": 2,
+            "name": "Sara",
+            "role": "user",
+            "hobbies": ["painting"],
+            "address": {"city": "Lahore", "country": "Pakistan"},
+        },
+    ]
 
 
 @router.post("/")
@@ -29,7 +44,13 @@ def get_posts(
 
 @router.get("/{user_id}")
 def get_user(user_id: int):
-    return {"id": user_id, "name": "Ali"}
+    return {
+        "id": user_id,
+        "name": "Ali",
+        "role": "admin",
+        "hobbies": ["reading", "cricket"],
+        "address": {"city": "Karachi", "country": "Pakistan"},
+    }
 
 
 @router.delete("/{user_id}")
