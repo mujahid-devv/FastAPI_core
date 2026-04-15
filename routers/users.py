@@ -1,6 +1,7 @@
-from fastapi import APIRouter, Depends, Path, Query
+from fastapi import APIRouter, Depends, Path, Query, BackgroundTasks
 from schemas.users import UserCreate, UserResponse
 from typing import List
+from pydantic import EmailStr
 
 router = APIRouter(prefix="/users", tags=["Users"])
 
@@ -25,6 +26,29 @@ def get_db():
         yield {"connected": True}
     finally:
         print("[DB] Connection closed")
+
+
+# Simple BackgroundTasks: use when task is specific to this endpoint only
+# BackgroundTasks in dependency: use when task is reusable across multiple endpoints
+def write_notification(email: str, message: str = ""):
+    with open("log.txt", mode="a") as email_file:
+        content = f"notification for {email} : {message} \n"
+        email_file.write(content)
+
+
+def get_notification_message():
+    return "simple background task"
+
+
+# background Task route
+@router.post("/send-notification/{email}")
+async def send_notification(
+    email: EmailStr,
+    background_tasks: BackgroundTasks,
+    message: str = Depends(get_notification_message),
+):
+    background_tasks.add_task(write_notification, email, message=message)
+    return {"message": "notification sent in the background"}
 
 
 @router.get("/", response_model=List[UserResponse])
