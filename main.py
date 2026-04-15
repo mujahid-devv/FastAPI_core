@@ -1,6 +1,6 @@
 from fastapi import FastAPI, Request
 from fastapi.middleware.cors import CORSMiddleware
-from routers import users, products
+from routers import users, products, ws
 
 app = FastAPI(title="My API", version="1.0.0", description="FastAPI project")
 
@@ -24,6 +24,7 @@ async def simple_middleware(request: Request, call_next):
 
 app.include_router(users.router)
 app.include_router(products.router)
+app.include_router(ws.router)
 
 
 @app.get("/")
