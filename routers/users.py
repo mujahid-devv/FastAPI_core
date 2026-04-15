@@ -7,7 +7,9 @@ router = APIRouter(prefix="/users", tags=["Users"])
 
 # NOTE: Route order matters — fixed paths before parameterized ones.
 # Specific routes (e.g. /users/posts) must come before generic (e.g. /users/{user_id}).
-
+# If you have dependencies with yield, the exit code will run after the middleware.
+# If there were any background tasks, they will run after all the middleware.
+# execution order is: Middleware → Path Operation → Dependencies (yield cleanup) → Background Tasks
 
 def get_role():
     return "admin"
