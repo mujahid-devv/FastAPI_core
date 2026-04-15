@@ -11,6 +11,7 @@ router = APIRouter(prefix="/users", tags=["Users"])
 # If there were any background tasks, they will run after all the middleware.
 # execution order is: Middleware → Path Operation → Dependencies (yield cleanup) → Background Tasks
 
+
 def get_role():
     return "admin"
 
